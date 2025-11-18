@@ -1,4 +1,5 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, boolean, integer, primaryKey } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -59,3 +60,86 @@ export const verification = pgTable("verification", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+// buildings table
+export const buildings = pgTable("buildings", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  abbreviation: text("abbreviation").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// rooms table
+export const rooms = pgTable("rooms", {
+  id: text("id").primaryKey(),
+  buildingId: text("building_id")
+    .notNull()
+    .references(() => buildings.id, { onDelete: "cascade" }),
+  roomNumber: text("room_number").notNull(),
+  roomType: text("room_type").notNull(), // classroom, lab, lecture hall, etc.
+  displayName: text("display_name"), // optional special name like "Chapel"
+  capacity: integer("capacity").notNull(),
+  floor: integer("floor").notNull(),
+  accessible: boolean("accessible").default(true).notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// features table
+export const features = pgTable("features", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  category: text("category").notNull(), // display, audio, connectivity, furniture, etc.
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
+// room features junction table
+export const roomFeatures = pgTable(
+  "room_features",
+  {
+    roomId: text("room_id")
+      .notNull()
+      .references(() => rooms.id, { onDelete: "cascade" }),
+    featureId: text("feature_id")
+      .notNull()
+      .references(() => features.id, { onDelete: "cascade" }),
+    quantity: integer("quantity").default(1).notNull(),
+    details: text("details"), // extra info like "outlets at tables", "ceiling mounted"
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.roomId, table.featureId] }),
+  ]
+);
+
+// relations
+
+export const buildingsRelations = relations(buildings, ({ many }) => ({
+  rooms: many(rooms),
+}));
+
+export const roomsRelations = relations(rooms, ({ one, many }) => ({
+  building: one(buildings, {
+    fields: [rooms.buildingId],
+    references: [buildings.id],
+  }),
+  roomFeatures: many(roomFeatures),
+}));
+
+export const featuresRelations = relations(features, ({ many }) => ({
+  roomFeatures: many(roomFeatures),
+}));
+
+export const roomFeaturesRelations = relations(roomFeatures, ({ one }) => ({
+  room: one(rooms, {
+    fields: [roomFeatures.roomId],
+    references: [rooms.id],
+  }),
+  feature: one(features, {
+    fields: [roomFeatures.featureId],
+    references: [features.id],
+  }),
+}));
