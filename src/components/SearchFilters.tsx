@@ -112,7 +112,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && updateFilters()}
             placeholder="Room number or name..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -125,7 +125,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
             id="building"
             value={selectedBuilding}
             onChange={(e) => setSelectedBuilding(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All buildings</option>
             {buildings.map((building) => (
@@ -145,7 +145,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
             id="type"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All types</option>
             {ROOM_TYPES.map((type) => (
@@ -166,7 +166,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
               onChange={(e) => setMinCapacity(e.target.value)}
               placeholder="Min"
               min="0"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="number"
@@ -174,7 +174,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
               onChange={(e) => setMaxCapacity(e.target.value)}
               placeholder="Max"
               min="0"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -190,7 +190,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
             value={floor}
             onChange={(e) => setFloor(e.target.value)}
             placeholder="Any floor"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 

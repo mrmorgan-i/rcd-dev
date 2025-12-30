@@ -1,6 +1,7 @@
 import { SearchFilters } from '../components/SearchFilters';
 import { RoomList } from '../components/RoomList';
 import { searchRooms, getBuildings, getFeatures } from '@/actions/rooms';
+import { AuthButtons } from '@/components/LoginButtons';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -35,9 +36,14 @@ export default async function Home({ searchParams }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Room Directory</h1>
-          <p className="text-gray-600">Search and filter rooms across campus</p>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Room Directory</h1>
+            <p className="text-gray-600">Search and filter rooms across campus</p>
+          </div>
+          <div>
+            <AuthButtons />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
