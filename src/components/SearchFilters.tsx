@@ -24,6 +24,7 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
   const [floor, setFloor] = useState(currentFilters.floor?.toString() || '');
   const [accessibleOnly, setAccessibleOnly] = useState(currentFilters.accessible || false);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>(currentFilters.featureIds || []);
+  const [isFeaturesExpanded, setIsFeaturesExpanded] = useState(false);
 
   const updateFilters = () => {
     const params = new URLSearchParams();
@@ -209,32 +210,49 @@ export function SearchFilters({ buildings, features, currentFilters }: SearchFil
 
         {/* Features */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">Features</label>
-          <div className="space-y-4">
-            {Object.entries(featuresByCategory).map(([category, categoryFeatures]) => (
-              <div key={category}>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                  {category}
-                </h3>
-                <div className="space-y-2">
-                  {categoryFeatures.map((feature) => (
-                    <label
-                      key={feature.id}
-                      className="flex items-center space-x-2 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedFeatures.includes(feature.id)}
-                        onChange={() => toggleFeature(feature.id)}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">{feature.name}</span>
-                    </label>
-                  ))}
+          <button
+            type="button"
+            onClick={() => setIsFeaturesExpanded(!isFeaturesExpanded)}
+            className="flex items-center justify-between w-full text-sm font-medium text-gray-700 mb-3 hover:text-gray-900 transition-colors"
+          >
+            <span>Features</span>
+            <svg
+              className={`w-4 h-4 transition-transform ${isFeaturesExpanded ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {isFeaturesExpanded && (
+            <div className="space-y-4">
+              {Object.entries(featuresByCategory).map(([category, categoryFeatures]) => (
+                <div key={category}>
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                    {category}
+                  </h3>
+                  <div className="space-y-2">
+                    {categoryFeatures.map((feature) => (
+                      <label
+                        key={feature.id}
+                        className="flex items-center space-x-2 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedFeatures.includes(feature.id)}
+                          onChange={() => toggleFeature(feature.id)}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">{feature.name}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Apply Filters Button */}
